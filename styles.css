@@ -1,0 +1,64 @@
+*{
+    color:#F9E0BB;
+}
+
+.head{
+    height: 20vh;
+    background-color: #884A39;
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+}
+
+.heading{
+    font-size: 35px;
+    margin-left: 40vw;
+}
+
+.addNewBook{
+    margin: 5px;
+    margin-right: 20px;
+    font-size: 20px;
+    padding: 5px;
+    border: 2px solid #F9E0BB;
+    border-radius: 5px;
+}
+
+.main{
+    height: 80vh;
+    background-color: #C38154;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.card{
+    background-color: white;
+    width: 200px;
+    height: 200px;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.top{
+    display: flex;
+    justify-content: space-between;
+}
+
+dialog div{
+    margin: 10px;
+    color: #C38154;
+}
+
+dialog label{
+    color: #C38154;
+}
+
+dialog button{
+    background-color:#C38154;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+}
+
