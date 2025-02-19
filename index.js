@@ -51,7 +51,7 @@ function renderCards() {
 
         cardElement.innerHTML = `
             <h2>${card.title}</h2>
-            <p>~by ${card.author}</p>
+            <p>~ by ${card.author}</p>
         `
         let readStatus = document.createElement("button");
         if (card.read) {
@@ -60,6 +60,7 @@ function renderCards() {
         else {
             readStatus.innerText = "Not Read";
         }
+        readStatus.classList.add("read");
         cardElement.appendChild(readStatus);
         let deleteCard = document.createElement("button");
         deleteCard.innerText = "Delete";
