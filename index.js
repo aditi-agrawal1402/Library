@@ -6,19 +6,29 @@ let read = document.querySelector(".read");
 let main = document.querySelector(".main");
 let titleInput = document.querySelector("#title");
 let authorInput = document.querySelector("#author");
-// let deleteBtn = document.querySelector(".deleteTheCard");
 
 const myLibrary = [];
 
-function Book(title, author, read) {
-    this.title = title;
-    this.author = author;
-    this.read = read;
-    this.index = myLibrary.length + 1;
+class Book{
+    constructor(title, author, read) {
+        this.title = title;
+        this.author = author;
+        this.read = read;
+        this.index = null;
+    }
+
+    toggleReadStatus(){
+        this.read = !this.read;
+    }
+
+    getReadStatusText(){
+        return this.read ? "Read" : "Not Read";
+    }
 }
 
 function addBookToLibrary(title, author, read) {
     let newBook = new Book(title, author, read);
+    newBook.index = myLibrary.length + 1;
     myLibrary.push(newBook);
     renderCards();
 }
@@ -32,11 +42,13 @@ function closeDialog() {
 }
 
 function toggleText(e) {
-    if (e.target.innerHTML == "Read") {
-        e.target.innerHTML = "Not Read";
-    }
-    else {
-        e.target.innerHTML = "Read";
+    if(e.target.classList.contains("read")){
+        const cardElement = e.target.closest(".card");
+        const index = cardElement.getAttribute("data-index");
+        const book = myLibrary[index];
+
+        book.toggleReadStatus();
+        e.target.innerHTML = book.getReadStatusText(); 
     }
 }
 
@@ -52,16 +64,14 @@ function renderCards() {
         cardElement.innerHTML = `
             <h2>${card.title}</h2>
             <p>~ by ${card.author}</p>
-        `
+        `;
+
         let readStatus = document.createElement("button");
-        if (card.read) {
-            readStatus.innerText = "Read";
-        }
-        else {
-            readStatus.innerText = "Not Read";
-        }
+        readStatus.innerText = card.getReadStatusText();
         readStatus.classList.add("read");
         cardElement.appendChild(readStatus);
+
+
         let deleteCard = document.createElement("button");
         deleteCard.innerText = "Delete";
         deleteCard.classList.add("deleteTheCard");
@@ -72,12 +82,15 @@ function renderCards() {
 }
 
 function getInputData() {
-    let title = titleInput.value;
-    let author = authorInput.value;
-    let readStatus = true;
-    if (read.innerText == "Not Read") {
-        readStatus = false;
+    let title = titleInput.value.trim();
+    let author = authorInput.value.trim();
+
+    if(!title || !author){
+        alert("Both title and author are required!");
+        return;
     }
+
+    let readStatus = read.innerText === "Read";
     addBookToLibrary(title, author, readStatus);
 
     titleInput.value = "";
@@ -85,29 +98,29 @@ function getInputData() {
 }
 
 function deleteTargetCard(e) {
-    // console.log(e);
     if(e.target.classList.contains("deleteTheCard")){
         const cardElement = e.target.closest(".card");
         const index = cardElement.getAttribute("data-index");
 
         myLibrary.splice(index,1);
 
+        myLibrary.forEach((book, idx) => {
+            book.index = idx + 1;
+        })
+
         renderCards();
     }
 }
 
 addNewBook.addEventListener("click", createDialog);
-save.addEventListener("click", closeDialog);
-save.addEventListener("click", getInputData);
 closeBtn.addEventListener("click", closeDialog);
+
+save.addEventListener("click", (e) => { 
+    e.preventDefault();
+    closeDialog();
+    getInputData();
+});
+
+
 read.addEventListener("click", (e) => { toggleText(e) });
-save.addEventListener("click", (e) => { e.preventDefault() });
 main.addEventListener("click",(e)=>{deleteTargetCard(e)});
-
-// addBookToLibrary("Harry Potter","J.K. Rowling", true);
-// addBookToLibrary("Game of thrones", "Nai pata", false);
-// addBookToLibrary("Throne of glass", "Sarah J. Mass", true);
-
-// myLibrary.forEach(book => {
-//     createCard(book.title, book.author, book.read);
-// });
